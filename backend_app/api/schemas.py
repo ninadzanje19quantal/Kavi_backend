@@ -9,7 +9,7 @@ class LinkedInRequest(BaseModel):
     user_password: str = os.getenv("LINKEDIN_PASSWORD")
     profile_url: str
 
-class chatbot_prompt(BaseModel):
+class chatbot_prompt_obj(BaseModel):
     prompt: str
     data: str | tuple | list
 
