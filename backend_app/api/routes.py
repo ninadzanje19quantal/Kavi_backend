@@ -18,7 +18,7 @@ from ..constants import *
 kavi = FastAPI()
 
 #For running the backend use
-"""uvicorn routes:kavi --reload --port 8000"""
+"""uvicorn backend_app.api.routes:kavi --reload --port 8000"""
 
 #Default Home route
 @kavi.get("/")
@@ -32,7 +32,7 @@ async def readCV(cv: UploadFile = File(...)):
     user_data.cv_data = cv_data
     return {"cv_data": user_data.cv_data}
 
-#Scrape the Linkedin data and summarize it
+#Scrape the LinkedIn data and summarize it
 @kavi.post("/linkedin-scraper/")
 async def linkedin_scraper_endpoint(request: LinkedInRequest):
     result = linkedin_scrapper(
@@ -55,6 +55,13 @@ async def chat_bot_current_work(final_prompt : chatbot_prompt_obj) -> str:
     response = chatbot_function(final_prompt.prompt, final_prompt.data)
     return response
 
+@kavi.get("/chatbot/current-work")
+async def user_current_work(current_work: str = Query(title="User Current Work",
+                                                      description="User will enter his current work",
+                                                      min_length=3)):
+    user_data.current_work = current_work
+    return {"current_work": user_data.current_work}
+
 @kavi.post("/chatbot/reason-interview")
 async def chat_bot_current_work(final_prompt : chatbot_prompt_obj) -> str:
     #What is the reason you are giving the interview
@@ -62,21 +69,42 @@ async def chat_bot_current_work(final_prompt : chatbot_prompt_obj) -> str:
     response = chatbot_function(final_prompt.prompt, final_prompt.data)
     return response
 
+@kavi.get("/chatbot/current-work")
+async def user_current_work(current_work: str = Query(title="User Current Work",
+                                                      description="User will enter his current work",
+                                                      min_length=3)):
+    user_data.current_work = current_work
+    return {"current_work": user_data.current_work}
+
 @kavi.post("/chatbot/interview-process")
-async def chat_bot_current_work(final_prompt : chatbot_prompt_obj) -> str:
+async def chat_bot_interview_process(final_prompt : chatbot_prompt_obj) -> str:
     #Where are you in the interview process
     final_prompt.prompt = where_in_interview_process
     response = chatbot_function(final_prompt.prompt, final_prompt.data)
     return response
 
+@kavi.get("/chatbot/current-work")
+async def user_interview_process(interview_process: str = Query(title="User Current Interview Process",
+                                                      description="Where is the user currently in the interview process",
+                                                      min_length=3)):
+    user_data.current_interview_process = interview_process
+    return {"current_interview_process": user_data.current_interview_process}
+
 @kavi.post("/chatbot/target-company")
-async def chat_bot_current_work(final_prompt : chatbot_prompt_obj) -> str:
+async def chat_bot_target_company(final_prompt : chatbot_prompt_obj) -> str:
     #Any specific company you are targeting
     final_prompt.prompt = target_company
     response = chatbot_function(final_prompt.prompt, final_prompt.data)
     return response
 
+@kavi.get("/chatbot/current-work")
+async def user_current_work(target_company: str = Query(title="User Target Company",
+                                                      description="What Company is the user targeting",
+                                                      min_length=3)):
+    user_data.target_company = target_company
+    return {"target_comapny": user_data.target_company}
+
 @kavi.get("/get-onboarding-summary")
-def get_onboarding_summary(user_data_obj) -> dict:
+async def get_onboarding_summary(user_data_obj) -> dict:
     user_data_dict: dict = user_data_obj
     return user_data_dict
