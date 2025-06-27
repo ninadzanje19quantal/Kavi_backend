@@ -1,0 +1,13 @@
+.venv/
+.env
+.idea/
+
+*.pdf
+
+sandbox.py
+/backend_app/api/routes_old.py
+
+/backend_app/data
+
+__pycache__/
+*.py[cod]
