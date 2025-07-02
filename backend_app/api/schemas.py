@@ -24,3 +24,17 @@ class user_data(BaseModel):
     current_interview_process: str= ""
     target_company: str= ""
     user_summary: str= ""
+
+"""user_data = {
+    'user_name': '',
+    'password': '',
+    'email': '',
+    'linkedin_data': '',
+    'cv_data': '',
+    'current_work': '',
+    'reason_for_interview': '',
+    'current_interview_process': '',
+    'target_company': '',
+    'user_summary': ''
+}
+"""

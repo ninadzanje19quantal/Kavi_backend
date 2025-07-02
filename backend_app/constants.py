@@ -36,3 +36,5 @@ target_company: str = "Using the following text as a context ask a question in o
                       "You can type something like “PM at Google” or “Marketing lead at a Series A startup.”"\
                       "Or upload a job description if you’ve got one handy."\
                       "And if you're still figuring it out, that’s totally fine — we can start general and narrow in as you go."
+
+onboarding_summary_prompt: str = "Create the user's summary using the following user data"
