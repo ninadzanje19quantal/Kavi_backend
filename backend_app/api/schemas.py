@@ -13,7 +13,7 @@ class chatbot_prompt_obj(BaseModel):
     prompt: str
     data: str | tuple | list
 
-class user_data(BaseModel):
+"""class user_data(BaseModel):
     user_name: str = ""
     password: str= ""
     email: str= ""
@@ -23,9 +23,9 @@ class user_data(BaseModel):
     reason_for_interview: str= ""
     current_interview_process: str= ""
     target_company: str= ""
-    user_summary: str= ""
+    user_summary: str= """""
 
-"""user_data = {
+user_data = {
     'user_name': '',
     'password': '',
     'email': '',
@@ -37,4 +37,3 @@ class user_data(BaseModel):
     'target_company': '',
     'user_summary': ''
 }
-"""
