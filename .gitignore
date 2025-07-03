@@ -11,3 +11,6 @@ sandbox.py
 
 __pycache__/
 *.py[cod]
+
+/backend_app/rag/knowledge_base
+/backend_app/rag/chroma
