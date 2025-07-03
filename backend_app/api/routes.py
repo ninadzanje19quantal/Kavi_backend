@@ -107,8 +107,8 @@ async def chat_bot_interview_process(final_prompt : chatbot_prompt_obj) -> str:
 async def user_interview_process(user_response: str = Query(title="User Current Interview Process",
                                                             description="Where is the user currently in the interview process",
                                                             min_length=3)):
-    user_data.current_interview_process = user_response
-    return {"current_interview_process": user_data.current_interview_process}
+    user_data["current_interview_process"] = user_response
+    return {"current_interview_process": user_data["current_interview_process"]}
 
 #Target Company
 @kavi.post("/chatbot/target-company")
@@ -128,7 +128,7 @@ async def user_target_company(user_response: str = Query(title="User Target Comp
 
 #Generate the onboarding summary
 @kavi.get("/get-onboarding-summary")
-async def get_onboarding_summary() -> str:
+async def get_onboarding_summary():
     data_used_for_summary = [user_data["cv_data"], user_data["linkedin_data"],
                              f"Current Work: {user_data["current_work"]}",
                              f"Reason for giving the interview {user_data["reason_for_interview"]}",
@@ -136,7 +136,7 @@ async def get_onboarding_summary() -> str:
                              f"Target Company: {user_data["target_company"]}"]
     onboarding_summary = chatbot_function(onboarding_summary_prompt, data_used_for_summary)
     user_data["user_summary"] = onboarding_summary
-    return onboarding_summary
+    return {"onboarding_summary": onboarding_summary}
 
 #Get user data (Testing purpose)
 @kavi.get("/user_info")
