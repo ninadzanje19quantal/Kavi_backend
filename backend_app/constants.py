@@ -1,3 +1,4 @@
+from chromadb.utils import embedding_functions
 from  dotenv import load_dotenv
 import os
 
@@ -38,3 +39,6 @@ target_company: str = "Using the following text as a context ask a question in o
                       "And if you're still figuring it out, that’s totally fine — we can start general and narrow in as you go."
 
 onboarding_summary_prompt: str = "Create a summary using the following data"
+
+# Configure the embedding function
+embedding_fn = embedding_functions.DefaultEmbeddingFunction()

@@ -1,8 +1,9 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import pandas as pd
 from pathlib import Path
-from chromadb.utils import embedding_functions
 import chromadb
+
+from ..constants import embedding_fn
 
 def read_csv_from_dir_into_txt(dir_path: str):
     csvs:  ... | None = Path(dir_path).iterdir()
@@ -26,8 +27,7 @@ def read_csv_from_dir_into_txt(dir_path: str):
     return chunks
 
 def create_embeddings_ids(chunks: list):
-    #Configure the embedding function
-    embedding_fn = embedding_functions.DefaultEmbeddingFunction()
+
 
     #Create the documents i.e. Divide your main document into smaller chunks
     documents = []
@@ -46,11 +46,9 @@ def create_embeddings_ids(chunks: list):
 
     return embeddings, ids, documents
 
-def create_vectorDB(embeddings, ids, documents, db_path: str | None, collection_name: str):
-    if isinstance(db_path, str):
-        chroma_client = chromadb.PersistentClient(db_path)
-    else:
-        chroma_client = chromadb.PersistentClient()
+def create_vectorDB(embeddings, ids, documents, collection_name: str):
+
+    chroma_client = chromadb.PersistentClient()
 
     collection = chroma_client.get_or_create_collection(name=collection_name)
 
