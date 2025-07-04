@@ -8,4 +8,7 @@
 
 2. Create a folder in backend_app/rag/knowledge_base
    and add the files that contain questions. These will be used to vectorize and build the knowledge base for our RAG part.
-3. Run vector_db.py once at only the first time to create the Vector database.
+3. In vector_db.py only during the first time run the functions.
+   1. read_csv_from_dir_into_txt _(Store the values and pass to next function)_
+   2. create_embeddings_ids _(Store the values and pass to next function)_
+   3. create_vectorDB
