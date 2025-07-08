@@ -4,9 +4,12 @@ from fastapi import FastAPI, Query, UploadFile, File, HTTPException
 import uvicorn
 from dotenv import load_dotenv
 import os
+
+from nipype.info import description
 from pydantic import BaseModel
 from pymupdf import pymupdf
 from starlette.middleware.cors import CORSMiddleware
+import json
 
 #python scripts
 from ..services import extract_text_from_cv
@@ -25,7 +28,7 @@ kavi.add_middleware(
 
     allow_credentials=True, # Allow cookies to be included in requests
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], # Allow specific HTTP methods, "*" allows all
-    allow_headers=["", "Authorization", "Content-Type"], # Allow specific headers, "" allows all standard and non-standard headers
+    allow_headers=[""], # Allow specific headers, "" allows all standard and non-standard headers
 )
 #For running the backend use
 """uvicorn backend_app.api.routes:kavi --reload --port 8000"""
@@ -126,16 +129,35 @@ async def user_target_company(user_response: str = Query(title="User Target Comp
     return {"target_comapny": user_data["target_company"]}
 
 
+
+class CandidateProfileSchema(BaseModel):
+    name: str
+    location: str
+    current_position: str
+    current_company: str
+    start_date: str
+    company_size: str
+    education: str
+    skills: list[str]
+    certifications: list[str]
+    linkedin_url: str
+
+class InterviewGoalsSchema(BaseModel):
+    career_stage: str
+    interview_reason: str
+    interview_stage: str
+    target_company: str
+    search_scope: str
+
+class OnboardingPayload(BaseModel):
+    candidate_profile: CandidateProfileSchema
+    interview_goals: InterviewGoalsSchema
+
 #Generate the onboarding summary
-@kavi.get("/get-onboarding-summary")
-async def get_onboarding_summary():
-    data_used_for_summary = [user_data["cv_data"], user_data["linkedin_data"],
-                             f"Current Work: {user_data["current_work"]}",
-                             f"Reason for giving the interview {user_data["reason_for_interview"]}",
-                             f"Current place in Interview process {user_data["current_interview_process"]}",
-                             f"Target Company: {user_data["target_company"]}"]
-    onboarding_summary = chatbot_function(onboarding_summary_prompt, data_used_for_summary)
-    user_data["user_summary"] = onboarding_summary
+@kavi.post("/onboarding/process")
+def process_onboarding_data(payload: OnboardingPayload):
+    data_as_dict = payload.model_dump()
+    onboarding_summary = chatbot_function(onboarding_summary_prompt, data_as_dict)
     return {"onboarding_summary": onboarding_summary}
 
 #Get user data (Testing purpose)
@@ -143,3 +165,38 @@ async def get_onboarding_summary():
 async def get_user_info(user_data_obj) -> dict:
     user_data_dict: dict = user_data_obj
     return user_data_dict
+
+"""
+{
+  "candidate_profile": {
+    "name": "Sanjeev Yadav",
+    "location": "Mumbai, Maharashtra, India",
+    "current_position": "Software Developer",
+    "current_company": "Quantal AI",
+    "start_date": "March 2025",
+    "company_size": "11-50",
+    "education": "Information Technology engineering student",
+    "skills": [
+      "GitHub",
+      "Unit Testing",
+      "API Development",
+      "Go (Programming Language)"
+    ],
+    "certifications": [
+      "Java (Basic)",
+      "Google Digital Garage Certification",
+      "Python (Basic)",
+      "Web Development Internship",
+      "SQL (Basic)"
+    ],
+    "linkedin_url": "https://www.linkedin.com/in/sanjeev-yadav-7349861a3/"
+  },
+  "interview_goals": {
+    "career_stage": "Beginning",
+    "interview_reason": "Career Start / Exploration",
+    "interview_stage": "Initial",
+    "target_company": "Google",
+    "search_scope": "Broad with future refinement"
+  }
+}
+"""
