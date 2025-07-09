@@ -7,7 +7,7 @@ from backend_app.constants import *
 
 
 
-def chatbot_function(prompt: str, data: list | str = "") -> str:
+def chatbot_function(prompt: str, data: list | dict | str = "") -> str:
     prompt = f"{prompt} {data}"
 
     client = genai.Client(api_key=gemini_api_key)
