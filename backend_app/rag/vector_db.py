@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 import chromadb
 
-from ..constants import embedding_fn
+from backend_app.constants import embedding_fn
 
 def read_csv_from_dir_into_txt(dir_path: str):
     csvs:  ... | None = Path(dir_path).iterdir()
@@ -54,3 +54,14 @@ def create_vectorDB(embeddings, ids, documents, collection_name: str):
 
     collection.add(embeddings=embeddings, ids=ids, documents=documents)
 
+
+"""
+First time run only
+"""
+#a = read_csv_from_dir_into_txt(r"D:\Work\Projects\Ultragenius\Monil\Kavi_backend\backend_app\rag\knowledge_base")
+#b, c, d = create_embeddings_ids(a)
+#create_vectorDB(b, c, d, "test_db_for_kavi")
+
+"""chroma_client = chromadb.PersistentClient(path="chroma")
+collection = chroma_client.get_collection(name="test_db_for_kavi")
+print(collection.peek())"""
